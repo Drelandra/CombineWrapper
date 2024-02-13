@@ -59,7 +59,7 @@ final class CombineWrapperTests: XCTestCase {
             case .finished:
                 XCTAssertTrue(isCompleted, "The specific line of code was not executed as expected")
             case .failure(let error):
-                XCTAssertTrue(isFailed, "The specific line of code was not executed as expected")
+                XCTAssertTrue(isFailed, "The specific line of code was not executed as expected. Error: \(error)")
             }
         }.store(in: &cancellables)
         
@@ -113,7 +113,7 @@ final class CombineWrapperTests: XCTestCase {
             case .finished:
                 XCTAssertTrue(isCompleted, "The specific line of code was not executed as expected")
             case .failure(let error):
-                XCTAssertTrue(isFailed, "The specific line of code was not executed as expected")
+                XCTAssertTrue(isFailed, "The specific line of code was not executed as expected. Error: \(error)")
             }
         }.store(in: &cancellables)
         
@@ -177,9 +177,9 @@ final class CombineWrapperTests: XCTestCase {
         }completion: { result in
             switch result {
             case .finished:
-                XCTAssertTrue(isCompleted)
+                XCTAssertTrue(isCompleted, "The specific line of code was not executed as expected")
             case .failure(let error):
-                XCTAssertTrue(isFailed)
+                XCTAssertTrue(isFailed, "The specific line of code was not executed as expected. Error: \(error)")
             }
         }.store(in: &cancellables)
         

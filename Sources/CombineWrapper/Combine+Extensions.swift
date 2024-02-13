@@ -50,6 +50,16 @@ public extension Publisher where Failure == Never {
         }
     }
     
+    func weakSink<T: AnyObject>(
+        on object: T,
+        receiveValue: @escaping (T, Self.Output) -> Void
+    ) -> AnyCancellable {
+        sink { [weak object] output in
+            guard let strongRef = object else { return }
+            receiveValue(strongRef, output)
+        }
+    }
+    
     func relayValue<Wrapper: CombineSubjectWrapper>(
         to subjectWrapper: Wrapper
     ) -> AnyCancellable where Wrapper.Subscribed == Output {
@@ -96,6 +106,16 @@ public extension Publisher where Failure == Error {
     ) -> AnyCancellable {
         sink { _ in } receiveValue: { [weak object] value in
             object?[keyPath: keyPath] = value
+        }
+    }
+    
+    func weakSink<T: AnyObject>(
+        on object: T,
+        receiveValue: @escaping (T, Self.Output) -> Void
+    ) -> AnyCancellable {
+        sink { _ in } receiveValue: { [weak object] output in
+            guard let strongRef = object else { return }
+            receiveValue(strongRef, output)
         }
     }
     
